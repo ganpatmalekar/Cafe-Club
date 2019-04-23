@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">Coffee Shop</string>
+    <string name="drawer_open">Drawer Open</string>
+    <string name="drawer_close">Drawer Close</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="about">
+        Techsys Informatics is a Global Technology Services company established in Sept 2013 located in Pune, with capabilities to deliver software services to clients globally.
+        Our customers are of all sizes ranging from start-up to large enterprises who realize that they need professional technology, training and staffing solutions to generate revenue streams, establish communication channels or streamline business operations.
+    </string>
+
+    <string name="mission">
+        To assist companies and individuals in making key business decisions, support Business Process Management (BPM).
+    </string>
+
+    <string name="vision">
+        To be a leading consulting firm that ensures client’s business sustainability; growth and empowering each individual’s intellect towards highest commercial productivity.
+    </string>
+
+    <string name="services">
+        The company provides services like
+            <li>Web Design and development</li>
+            <li>Software Development</li>
+            <li>Digital Marketing</li>
+            <li>Graphics Design</li>
+    </string>
+
+</resources>

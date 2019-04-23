@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <group android:checkableBehavior="single">
+        <item android:title="All Lables">
+            <menu>
+                <item
+                    android:id="@+id/home_menu"
+                    android:title="Home"
+                    android:icon="@drawable/ic_home"
+                    app:showAsAction="ifRoom"/>
+                <item
+                    android:id="@+id/fav_menu"
+                    android:title="Favourites"
+                    android:icon="@drawable/ic_favorite"
+                    app:showAsAction="ifRoom"/>
+                <item
+                    android:id="@+id/view_cart_menu"
+                    android:title="View Cart"
+                    android:icon="@drawable/view_cart"
+                    app:showAsAction="ifRoom"/>
+                <item
+                    android:id="@+id/view_order_menu"
+                    android:title="View Order"
+                    android:icon="@drawable/view_order"
+                    app:showAsAction="ifRoom"/>
+                <item
+                    android:id="@+id/profile_menu"
+                    android:title="My Profile"
+                    android:icon="@drawable/my_profile"
+                    app:showAsAction="ifRoom"/>
+            </menu>
+        </item>
+    </group>
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/about_menu"
+            android:title="About Us"
+            android:icon="@drawable/ic_about"
+            app:showAsAction="ifRoom"/>
+        <item
+            android:id="@+id/contact_menu"
+            android:title="Contact Us"
+            android:icon="@drawable/ic_call"
+            app:showAsAction="ifRoom"/>
+    </group>
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/logout_menu"
+            android:title="Logout"
+            android:icon="@drawable/ic_logout"
+            app:showAsAction="ifRoom"/>
+    </group>
+</menu>
