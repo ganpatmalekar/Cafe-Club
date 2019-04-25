@@ -29,11 +29,9 @@ import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    TextView textViewLogin;
-    EditText name, email, contact, pass, conf_pass, addr;
-    /*RadioGroup gender;
-    RadioButton radio;*/
-    Button signup;
+    private TextView textViewLogin;
+    private EditText etName, etEmail, etContact, etPassword, etConf_pass, etAddress;
+    private Button btn_register;
 
     private static String REG_URL = HomeActivity.BASE_URL + "/PHPScripts/customer_register.php";
 
@@ -42,139 +40,146 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        name = (EditText)this.findViewById(R.id.name);
-        email = (EditText)this.findViewById(R.id.email);
-        contact = (EditText)this.findViewById(R.id.phone);
-        pass = (EditText)this.findViewById(R.id.password);
-        conf_pass = (EditText)this.findViewById(R.id.confirm_pass);
-        addr = (EditText)this.findViewById(R.id.address);
+        etName = (EditText)findViewById(R.id.name);
+        etEmail = (EditText)findViewById(R.id.email);
+        etContact = (EditText)findViewById(R.id.phone);
+        etPassword = (EditText)findViewById(R.id.password);
+        etConf_pass = (EditText)findViewById(R.id.confirm_pass);
+        etAddress = (EditText)findViewById(R.id.address);
 
-        //gender = (RadioGroup)this.findViewById(R.id.gender);
+        btn_register = (Button)findViewById(R.id.register);
+        btn_register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                validateRegister(v);
+            }
+        });
 
-        signup = (Button)this.findViewById(R.id.register);
-
-        textViewLogin = (TextView)this.findViewById(R.id.login);
+        textViewLogin = (TextView)findViewById(R.id.txv_login);
+        textViewLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     //insert into employee table
-    public void signup(View view)
-    {
+    public void validateRegister(View view) {
         /*selected_id = gender.getCheckedRadioButtonId();
         radio = (RadioButton)this.findViewById(selected_id);
         gen = radio.getText().toString();*/
-        final String nm = this.name.getText().toString().trim();
-        final String em = this.email.getText().toString().trim();
-        final String cn = this.contact.getText().toString().trim();
-        final String psw = this.pass.getText().toString().trim();
-        final String c_psw = this.conf_pass.getText().toString().trim();
-        final String addrr = this.addr.getText().toString().trim();
+        final String nm = etName.getText().toString().trim();
+        final String em = etEmail.getText().toString().trim();
+        final String cn = etContact.getText().toString().trim();
+        final String psw = etPassword.getText().toString().trim();
+        final String c_psw = etConf_pass.getText().toString().trim();
+        final String addrr = etAddress.getText().toString().trim();
 
         if (nm.isEmpty()){
-            name.setError("Name is required");
-            name.requestFocus();
+            etName.setError("Name is required");
+            etName.requestFocus();
             return;
         }
         if (em.isEmpty()){
-            email.setError("Email is required");
-            email.requestFocus();
+            etEmail.setError("Email is required");
+            etEmail.requestFocus();
             return;
         }
         if (!Patterns.EMAIL_ADDRESS.matcher(em).matches()) {
-            email.setError("Please enter a valid email");
-            email.requestFocus();
+            etEmail.setError("Please enter a valid email");
+            etEmail.requestFocus();
             return;
         }
         if (cn.isEmpty()){
-            contact.setError("Phone number required");
-            contact.requestFocus();
+            etContact.setError("Phone number required");
+            etContact.requestFocus();
             return;
         }
         if (psw.isEmpty()){
-            pass.setError("Password required");
-            pass.requestFocus();
+            etPassword.setError("Password required");
+            etPassword.requestFocus();
             return;
         }
         if (psw.length() < 8){
-            pass.setError("Password should be atleast 8 characters long");
-            pass.requestFocus();
+            etPassword.setError("Password should be atleast 8 characters long");
+            etPassword.requestFocus();
             return;
         }
         if (!psw.equals(c_psw)){
-            conf_pass.setError("Password don't match");
-            conf_pass.requestFocus();
+            etConf_pass.setError("Password don't match");
+            etConf_pass.requestFocus();
             return;
         }
         if (addrr.isEmpty()){
-            addr.setError("Address required");
-            addr.requestFocus();
+            etAddress.setError("Address required");
+            etAddress.requestFocus();
             return;
         }
         if (!nm.isEmpty() && !em.isEmpty() && !cn.isEmpty() && !psw.isEmpty() && !c_psw.isEmpty() && !addrr.isEmpty()) {
-            addToRegister();
+            addToRegister(view);
         }
     }
 
-    public void addToRegister()
-    {
-        final String name = this.name.getText().toString().trim();
-        final String email = this.email.getText().toString().trim();
-        final String contact = this.contact.getText().toString().trim();
-        final String password = this.pass.getText().toString().trim();
-        final String c_password = this.conf_pass.getText().toString().trim();
-        final String address = this.addr.getText().toString().trim();
+    public void addToRegister(View view) {
+        final String name, email, contact, password, address;
+
+        name = etName.getText().toString().trim();
+        email = etEmail.getText().toString().trim();
+        contact = etContact.getText().toString().trim();
+        password = etPassword.getText().toString().trim();
+        address = etAddress.getText().toString().trim();
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, REG_URL, new Response.Listener<String>() {
             String msg = null;
             @Override
             public void onResponse(String response) {
-
                 try {
                     JSONArray jsonArray = new JSONArray(response);
                     for (int i=0; i<jsonArray.length(); i++) {
-                        JSONObject object = jsonArray.getJSONObject(i);
-                        msg = object.getString("message");
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        msg = jsonObject.getString("message");
                     }
                 } catch (JSONException e) {
-                    //e.printStackTrace();
-                    Toast.makeText(getApplicationContext(), "Error: "+e.getMessage(), Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
+                    Toast.makeText(RegisterActivity.this, "Error: "+e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
-                if (msg.equals("success")) {
-                    Toast.makeText(getApplicationContext(), "Registration success...", Toast.LENGTH_LONG).show();
+                if (msg.equalsIgnoreCase("success")) {
+                    Toast.makeText(RegisterActivity.this, "Registration Success!!!", Toast.LENGTH_SHORT).show();
                     sendMail();
-                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                    Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                     startActivity(intent);
                 } else {
-                    Toast.makeText(getBaseContext(), msg, Toast.LENGTH_LONG).show();
+                    Toast.makeText(RegisterActivity.this, "Error: "+msg, Toast.LENGTH_SHORT).show();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), "Error: "+error.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(RegisterActivity.this, "Error: "+error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }){
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
+                Map<String, String> params = new HashMap<>();
                 params.put("name", name);
                 params.put("email", email);
                 params.put("phone", contact);
                 params.put("pass", password);
-                params.put("c_pass", c_password);
                 params.put("address", address);
 
                 return params;
             }
         };
-        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        RequestQueue requestQueue = Volley.newRequestQueue(RegisterActivity.this);
         requestQueue.add(stringRequest);
     }
 
     //Sending mail after successful registration
-    public void sendMail()
-    {
-        String nm = name.getText().toString();
-        String receipant = email.getText().toString().trim();
+    public void sendMail() {
+        String nm = etName.getText().toString();
+        String receipant = etEmail.getText().toString().trim();
         String subject  = "Success";
         String message = "Dear "+nm+",\n\n\tThank you for registering with us.";
 
@@ -183,11 +188,5 @@ public class RegisterActivity extends AppCompatActivity {
 
         //Executing SendMail to send mail
         sendMail.execute();
-    }
-
-    public void gotoLogin(View view)
-    {
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
     }
 }

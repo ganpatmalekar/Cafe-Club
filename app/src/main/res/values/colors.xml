@@ -8,5 +8,5 @@
     <color name="colorBackground">#151111</color>
 
     <color name="buttonBackground">#c49b63</color>
-    <color name="textColor">#000</color>
+    <color name="textColor">#c49b63</color>
 </resources>

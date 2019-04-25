@@ -1,6 +1,10 @@
 package com.example.swapnil.coffeeshop.activities;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -38,7 +42,7 @@ public class Cart extends AppCompatActivity {
 
     private Toolbar toolbar;
     private RecyclerView recyclerView;
-    public TextView txtTotalPrice;
+    private TextView txtTotalPrice;
     private Button btnPlace;
     private RecyclerView.Adapter adapter;
     private List<CartModel> listItems;
@@ -80,6 +84,7 @@ public class Cart extends AppCompatActivity {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_VIEW_CART, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                String msg = null;
                 progressDialog.dismiss();
                 try {
                     JSONArray jsonArray = new JSONArray(response);
@@ -126,6 +131,20 @@ public class Cart extends AppCompatActivity {
         };
         RequestQueue requestQueue = Volley.newRequestQueue(Cart.this);
         requestQueue.add(stringRequest);
+    }
+
+    public AlertDialog.Builder buildDialog(Context context) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("No Items in Cart");
+        builder.setMessage("Your cart is empty! Please add some items");
+
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+        return builder;
     }
 
     @Override

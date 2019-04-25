@@ -50,8 +50,7 @@ public class LoginActivity extends AppCompatActivity {
         forgot = (TextView)this.findViewById(R.id.forgotPWD);
     }
 
-    public void signup(View view)
-    {
+    public void signup(View view) {
         Intent intent = new Intent(this, RegisterActivity.class);
         startActivity(intent);
     }
@@ -135,8 +134,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    public void newPSWOTP(View view)
-    {
+    public void newPSWOTP(View view) {
         Intent intent = new Intent(this, ForgotPassword.class);
         startActivity(intent);
     }

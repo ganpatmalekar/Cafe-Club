@@ -91,7 +91,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/forgotPWD"
                 android:text="Forgotten Password?"
-                android:textColor="#0000ff"
+                android:textColor="@color/textColor"
                 android:textSize="16dp"
                 android:clickable="true"
                 android:gravity="center_horizontal"
