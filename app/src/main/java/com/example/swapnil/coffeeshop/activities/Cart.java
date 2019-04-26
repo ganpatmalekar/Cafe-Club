@@ -107,7 +107,7 @@ public class Cart extends AppCompatActivity {
                     recyclerView.setAdapter(adapter);
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(Cart.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                    buildDialog(Cart.this).show();
                 }
             }
         }, new Response.ErrorListener() {
