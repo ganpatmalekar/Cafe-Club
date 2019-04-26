@@ -66,7 +66,7 @@ public class HomeActivity extends AppCompatActivity {
         String mName = user.get(sessionManager.NAME);
 
         toolbar = (android.support.v7.widget.Toolbar)this.findViewById(R.id.toolbar);
-        toolbar.setTitle("Coffee Shop");
+        toolbar.setTitle(getString(R.string.app_name));
         setSupportActionBar(toolbar);
 
         drawerLayout = (DrawerLayout)this.findViewById(R.id.drawerLayout);
