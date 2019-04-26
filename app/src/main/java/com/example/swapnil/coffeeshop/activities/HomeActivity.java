@@ -118,6 +118,10 @@ public class HomeActivity extends AppCompatActivity {
                         transaction4.addToBackStack(null);
                         transaction4.commit();
                         break;
+                    case R.id.fav_menu:
+                        Intent intent2 = new Intent(getApplicationContext(), Favourites.class);
+                        startActivity(intent2);
+                        break;
                     case R.id.view_cart_menu:
                         Intent intent1 = new Intent(getApplicationContext(), Cart.class);
                         startActivity(intent1);

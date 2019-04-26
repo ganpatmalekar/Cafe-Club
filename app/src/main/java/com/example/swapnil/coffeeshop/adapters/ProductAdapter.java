@@ -10,18 +10,35 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.swapnil.coffeeshop.SessionManager;
+import com.example.swapnil.coffeeshop.activities.HomeActivity;
 import com.example.swapnil.coffeeshop.activities.MenuItemDetails;
 import com.example.swapnil.coffeeshop.models.MenuItemsModel;
 import com.example.swapnil.coffeeshop.R;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductHolder> {
 
     private Context context;
     private List<MenuItemsModel> listItems;
+    private static String URL_ADD_FAV = HomeActivity.BASE_URL + "/PHPScripts/addFavourites.php";
+    private SessionManager sessionManager;
 
     public ProductAdapter(Context context, List<MenuItemsModel> listItems){
         this.context = context;
@@ -55,6 +72,59 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
                 context.startActivity(intent);
             }
         });
+
+        productHolder.imageViewFav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int pos = productHolder.getAdapterPosition();
+                addToFavourite(pos);
+                productHolder.imageViewFav.setImageResource(R.drawable.ic_favorite_add);
+            }
+        });
+    }
+
+    // add favourites
+    private void addToFavourite(final int pos){
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_ADD_FAV, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    String msg = jsonObject.getString("message");
+
+                    if (msg.equals("success")){
+                        Toast.makeText(context, "Added to Favourite Success!!!", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(context, "Error: "+ e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(context, "Error: "+ error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                MenuItemsModel model = listItems.get(pos);
+                sessionManager = new SessionManager(context);
+                HashMap<String, String> user = sessionManager.getUserDetails();
+                String user_id = user.get(SessionManager.NAME);
+
+                Map<String, String> params = new HashMap<>();
+                params.put("u_id", user_id);
+                params.put("p_id", model.getProd_id());
+
+                return params;
+            }
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        requestQueue.add(stringRequest);
     }
 
     @Override
@@ -64,7 +134,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
 
     public class ProductHolder extends RecyclerView.ViewHolder {
 
-        ImageView imageView;
+        ImageView imageView, imageViewFav;
         TextView textView;
         LinearLayout linearLayout;
 
@@ -73,6 +143,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
 
             imageView = (ImageView)itemView.findViewById(R.id.img);
             textView = (TextView)itemView.findViewById(R.id.name);
+            imageViewFav = (ImageView)itemView.findViewById(R.id.fav_image);
             linearLayout = (LinearLayout)itemView.findViewById(R.id.linearLayout);
         }
     }

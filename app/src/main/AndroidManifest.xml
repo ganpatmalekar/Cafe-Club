@@ -15,6 +15,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".activities.Favourites"></activity>
         <activity android:name=".activities.Cart" />
         <activity android:name=".activities.Feedback" />
         <activity android:name=".activities.ProductDetails" />
