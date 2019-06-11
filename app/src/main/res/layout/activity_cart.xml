@@ -64,7 +64,7 @@
                 android:layout_height="70dp"
                 android:text="Place Order"
                 android:textSize="20sp"
-                android:textColor="@color/textColor"
+                android:textColor="#FFFFFF"
                 android:backgroundTint="@color/buttonBackground"
                 android:padding="20dp"
                 android:layout_margin="5dp"

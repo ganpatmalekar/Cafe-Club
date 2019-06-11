@@ -11,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,6 +50,7 @@ public class Cart extends AppCompatActivity {
 
     private SessionManager sessionManager;
     private static String URL_VIEW_CART = HomeActivity.BASE_URL + "/PHPScripts/viewCart.php";
+    private static String URL_PLACE_ORDER = HomeActivity.BASE_URL + "/PHPScripts/placeOrder.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,10 +69,17 @@ public class Cart extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
 
         txtTotalPrice = (TextView)this.findViewById(R.id.total);
-        btnPlace = (Button)this.findViewById(R.id.btnPlaceOrder);
 
         listItems = new ArrayList<>();
         viewCart();
+
+        btnPlace = (Button)this.findViewById(R.id.btnPlaceOrder);
+        btnPlace.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                placeOrder();
+            }
+        });
     }
 
     //add products into the cart
@@ -107,7 +116,7 @@ public class Cart extends AppCompatActivity {
                     recyclerView.setAdapter(adapter);
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    buildDialog(Cart.this).show();
+                    buildDialog(Cart.this, "No Items in Cart", "Your cart is empty! Please add some items").show();
                 }
             }
         }, new Response.ErrorListener() {
@@ -133,10 +142,57 @@ public class Cart extends AppCompatActivity {
         requestQueue.add(stringRequest);
     }
 
-    public AlertDialog.Builder buildDialog(Context context) {
+    //place your order
+    private void placeOrder() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_PLACE_ORDER, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    String msg = jsonObject.getString("message");
+
+                    if (msg.equals("success")){
+                        Toast.makeText(getApplicationContext(), "Order Placed Success!!!", Toast.LENGTH_LONG).show();
+
+                        listItems.clear();
+                        adapter.notifyDataSetChanged();
+                        buildDialog(Cart.this, "Info", "You have placed your order.").show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "Error: "+ e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(), "Error: "+ error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                sessionManager = new SessionManager(getApplicationContext());
+                HashMap<String, String> user = sessionManager.getUserDetails();
+                String user_id = user.get(SessionManager.NAME);
+
+                Map<String, String> params = new HashMap<>();
+                params.put("uid", user_id);
+
+                return params;
+            }
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        requestQueue.add(stringRequest);
+    }
+
+    public AlertDialog.Builder buildDialog(Context context, String title, String message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("No Items in Cart");
-        builder.setMessage("Your cart is empty! Please add some items");
+        builder.setTitle(title);
+        builder.setMessage(message);
 
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override

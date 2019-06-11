@@ -91,16 +91,12 @@ public class HomeActivity extends AppCompatActivity {
                         fragmentTransaction.commit();
                         break;
                     case R.id.view_order_menu:
-                        FragmentManager manager1 = getSupportFragmentManager();
-                        FragmentTransaction transaction1 = manager1.beginTransaction();
-                        ViewOrder viewOrder = new ViewOrder();
-                        transaction1.replace(R.id.blank_fragment, viewOrder);
-                        transaction1.addToBackStack(null);
-                        transaction1.commit();
+                        Intent intent = new Intent(getApplicationContext(), Order.class);
+                        startActivity(intent);
                         break;
                     case R.id.profile_menu:
-                        Intent intent = new Intent(HomeActivity.this, MyProfile.class);
-                        startActivity(intent);
+                        Intent intent1 = new Intent(HomeActivity.this, MyProfile.class);
+                        startActivity(intent1);
                         break;
                     case R.id.about_menu:
                         FragmentManager manager3 = getSupportFragmentManager();
@@ -123,8 +119,8 @@ public class HomeActivity extends AppCompatActivity {
                         startActivity(intent2);
                         break;
                     case R.id.view_cart_menu:
-                        Intent intent1 = new Intent(getApplicationContext(), Cart.class);
-                        startActivity(intent1);
+                        Intent intent3 = new Intent(getApplicationContext(), Cart.class);
+                        startActivity(intent3);
                         break;
                     case R.id.logout_menu:
                         sessionManager.logoutUser();

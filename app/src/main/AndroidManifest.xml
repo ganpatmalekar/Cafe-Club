@@ -7,8 +7,8 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_SMS"/>
-    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
 
     <application
         android:allowBackup="true"
@@ -17,7 +17,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.Favourites"></activity>
+        <activity android:name=".activities.Order"></activity>
+        <activity android:name=".activities.Favourites" />
         <activity android:name=".activities.Cart" />
         <activity android:name=".activities.Feedback" />
         <activity android:name=".activities.ProductDetails" />
@@ -38,9 +39,10 @@
         <activity android:name=".activities.ForgotPassword" />
         <activity android:name=".activities.SetNewPassword" />
         <activity android:name=".activities.PasswordUpdated" />
-
-        <activity android:name="com.paytm.pgsdk.PaytmPGActivity"
-            android:screenOrientation="portrait" android:configChanges="keyboardHidden|orientation|keyboard"/>
+        <activity
+            android:name="com.paytm.pgsdk.PaytmPGActivity"
+            android:configChanges="keyboardHidden|orientation|keyboard"
+            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="preloaded_fonts"
